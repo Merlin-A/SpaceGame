@@ -1,6 +1,4 @@
-
 import pygame
-
 
 pygame.init()
 # Create the Screen
@@ -17,9 +15,12 @@ playerImg = pygame.image.load('./img/space-invaders.png')
 playerX = 370
 playerY = 480
 
+playerX_change = 0
+playerY_change = 0
 
-def player():
-    screen.blit(playerImg, (playerX, playerY))
+
+def player(x, y):
+    screen.blit(playerImg, (x, y))
 
 
 # Game Loop
@@ -36,13 +37,30 @@ while running:
             print("Quitting Program")
             running = False
 
-    player()
+        # if keystroke is pressed check whether its right of left
+
+        if event.type == pygame.KEYDOWN:
+
+            if event.key == pygame.K_LEFT:
+                playerX_change = -0.5
+
+            if event.key == pygame.K_RIGHT:
+                playerX_change = 0.5
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                playerX_change = 0
+
+    # Doing this helps in making the cursor flow,
+    # as the values of playerX is updated in a while loop
+    playerX += playerX_change
+
+    if playerX < 0:
+        playerX = 0
+
+    elif playerX > 725:
+        playerX = 725
+
+    player(playerX, playerY)
 
     pygame.display.update()
-
-
-
-
-
-
-
