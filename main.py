@@ -35,7 +35,7 @@ def player(x, y):
 enemyImage = pygame.image.load('./img/alien.png')
 enemy_X = random.randint(0, 736)
 enemy_Y = random.randint(50, 250)
-enemyX_change = 0.3
+enemyX_change = 0.2
 enemyY_change = 40
 
 
@@ -116,14 +116,18 @@ while running:
     enemy_X += enemyX_change
 
     if enemy_X <= 0:
-        enemyX_change = 0.3
+        enemyX_change = 0.2
         enemy_Y += enemyY_change
 
     elif enemy_X > 736:
-        enemyX_change = -0.3
+        enemyX_change = -0.2
         enemy_Y += enemyY_change
 
     # Bullet Movement
+
+    if bulletY <= 0:
+        bullet_state = "ready"
+        bulletY = 480
 
     if bullet_state == "fire":
 
