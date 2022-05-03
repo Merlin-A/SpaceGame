@@ -12,6 +12,10 @@ pygame.display.set_icon(icon)
 # Player
 
 playerImg = pygame.image.load('./img/space-invaders.png')
+
+o_X = 370
+o_Y = 480
+
 playerX = 370
 playerY = 480
 
@@ -30,7 +34,7 @@ running = True
 
 while running:
 
-    screen.fill((0, 0, 0))
+    screen.fill((0, 250, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -42,10 +46,14 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.5
+                playerX_change = -1
 
             if event.key == pygame.K_RIGHT:
-                playerX_change = 0.5
+                playerX_change = 1
+
+            if event.key == pygame.K_r and pygame.KMOD_CTRL:
+                playerX = o_X
+                playerY = o_Y
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
