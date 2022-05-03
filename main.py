@@ -40,16 +40,23 @@ def player(x, y):
 score = 0
 
 # Enemy
+enemyImage = []
+enemy_X = []
+enemy_Y = []
+enemyX_change = []
+enemyY_change = []
+num_of_enemies = int(input("Enter the Number of Enemies -> "))
 
-enemyImage = pygame.image.load('./img/alien.png')
-enemy_X = random.randint(0, 735)
-enemy_Y = random.randint(50, 250)
-enemyX_change = 0.2
-enemyY_change = 40
+for i in range(num_of_enemies):
+    enemyImage.append(pygame.image.load('./img/alien.png'))
+    enemy_X.append(random.randint(0, 735))
+    enemy_Y.append(random.randint(50, 250))
+    enemyX_change.append(0.2)
+    enemyY_change.append(40)
 
 
-def enemy(x, y):
-    screen.blit(enemyImage, (x, y))
+def enemy(x, y, i):
+    screen.blit(enemyImage[i], (x, y))
 
 
 # BackGround Image
@@ -135,15 +142,30 @@ while running:
 
     # Enemy
 
-    enemy_X += enemyX_change
+    for i in range(num_of_enemies):
 
-    if enemy_X <= 0:
-        enemyX_change = 0.2
-        enemy_Y += enemyY_change
+        enemy_X[i] += enemyX_change[i]
 
-    elif enemy_X > 736:
-        enemyX_change = -0.2
-        enemy_Y += enemyY_change
+        if enemy_X[i] <= 0:
+            enemyX_change[i] = 0.2
+            enemy_Y[i] += enemyY_change[i]
+
+        elif enemy_X[i] > 736:
+            enemyX_change[i] = -0.2
+            enemy_Y[i] += enemyY_change[i]
+
+        # Collision
+
+        collision = isCollision(enemy_X[i], enemy_Y[i], bulletX, bulletY)
+        if collision:
+            bulletY = 480
+            bullet_state = "ready"
+            score += 1
+            print(score)
+            enemy_X[i] = random.randint(0, 736)
+            enemy_Y[i] = random.randint(50, 250)
+
+        enemy(enemy_X[i], enemy_Y[i], i)
 
     # Bullet Movement
 
@@ -157,18 +179,7 @@ while running:
 
     # Collision
 
-    collision = isCollision(enemy_X, enemy_Y, bulletX, bulletY)
-    if collision:
-        bulletY = 480
-        bullet_state = "ready"
-        score += 1
-        print(score)
-        enemy_X = random.randint(0, 736)
-        enemy_Y = random.randint(50, 250)
-
     # if enemy_Y > 600:
     #     bullet_state = "fired"
 
-    enemy(enemy_X, enemy_Y)
-
-    pygame.display. update()
+    pygame.display.update()
