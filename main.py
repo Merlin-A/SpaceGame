@@ -1,5 +1,6 @@
 import pygame
 import random
+import math
 
 # TODO: Make a single Bullet which comes from the back
 # TODO : Make a single Missile to fire with Shift + Space and let it track the enemy
@@ -33,10 +34,15 @@ def player(x, y):
     screen.blit(playerImg, (x, y))
 
 
+# Score
+
+
+score = 0
+
 # Enemy
 
 enemyImage = pygame.image.load('./img/alien.png')
-enemy_X = random.randint(0, 736)
+enemy_X = random.randint(0, 735)
 enemy_Y = random.randint(50, 250)
 enemyX_change = 0.2
 enemyY_change = 40
@@ -66,6 +72,17 @@ def fire_bullet(x, y):
     global bullet_state
     bullet_state = "fire"
     screen.blit(bulletImg, (x + 20, y - 20))
+
+
+# Collision Function
+
+def isCollision(enemy_X, enemy_Y, bulletX, bulletY):
+    distance = math.sqrt((math.pow(enemy_X - bulletX, 2)) + (math.pow(enemy_Y - bulletY, 2)))
+
+    if distance <= 32:
+        return True
+    else:
+        return False
 
 
 # Game Loop
@@ -138,9 +155,20 @@ while running:
         fire_bullet(bulletX, bulletY)
         bulletY -= bulletY_change
 
+    # Collision
+
+    collision = isCollision(enemy_X, enemy_Y, bulletX, bulletY)
+    if collision:
+        bulletY = 480
+        bullet_state = "ready"
+        score += 1
+        print(score)
+        enemy_X = random.randint(0, 736)
+        enemy_Y = random.randint(50, 250)
+
     # if enemy_Y > 600:
     #     bullet_state = "fired"
 
     enemy(enemy_X, enemy_Y)
 
-    pygame.display.update()
+    pygame.display. update()
