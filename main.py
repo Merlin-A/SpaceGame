@@ -1,6 +1,9 @@
 import pygame
 import random
 
+# TODO: Make a single Bullet which comes from the back
+# TODO : Make a single Missile to fire with Shift + Space and let it track the enemy
+
 pygame.init()
 # Create the Screen
 screen = pygame.display.set_mode((800, 600))
@@ -93,7 +96,9 @@ while running:
                 playerY = o_Y
 
             if event.key == pygame.K_SPACE:
-                fire_bullet(playerX, bulletY)
+                if bullet_state == "ready":
+                    bulletX = playerX
+                    fire_bullet(bulletX, bulletY)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -130,9 +135,11 @@ while running:
         bulletY = 480
 
     if bullet_state == "fire":
-
-        fire_bullet(playerX, bulletY)
+        fire_bullet(bulletX, bulletY)
         bulletY -= bulletY_change
+
+    # if enemy_Y > 600:
+    #     bullet_state = "fired"
 
     enemy(enemy_X, enemy_Y)
 
