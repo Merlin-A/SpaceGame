@@ -36,8 +36,16 @@ def player(x, y):
 
 # Score
 
+score_value = 0
+font = pygame.font.SysFont("Britannic Bold", 32)
+textX = 10
+textY = 10
 
-score = 0
+
+def showScore(x, y):
+    score = font.render("Score : " + str(score_value), True, (255, 255, 255))
+    screen.blit(score, (x, y))
+
 
 # Enemy
 enemyImage = []
@@ -160,8 +168,8 @@ while running:
         if collision:
             bulletY = 480
             bullet_state = "ready"
-            score += 1
-            print(score)
+            score_value += 1
+            print(score_value)
             enemy_X[i] = random.randint(0, 736)
             enemy_Y[i] = random.randint(50, 250)
 
@@ -177,9 +185,9 @@ while running:
         fire_bullet(bulletX, bulletY)
         bulletY -= bulletY_change
 
-    # Collision
-
     # if enemy_Y > 600:
     #     bullet_state = "fired"
+
+    showScore(textX, textY)
 
     pygame.display.update()
