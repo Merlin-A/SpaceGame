@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+from pygame import mixer
 
 # TODO: Make a single Bullet which comes from the back
 # TODO : Make a single Missile to fire with Shift + Space and let it track the enemy
@@ -38,12 +39,13 @@ def player(x, y):
 
 score_value = 0
 font = pygame.font.SysFont("Britannic Bold", 32)
+
 textX = 10
 textY = 10
 
 
 def showScore(x, y):
-    score = font.render("Score : " + str(score_value), True, (255, 255, 255))
+    score = font.render("Score : " + str(score_value), True, ('#FFF12F'))
     screen.blit(score, (x, y))
 
 
@@ -70,6 +72,20 @@ def enemy(x, y, i):
 # BackGround Image
 
 bcImage = pygame.image.load('./img/space.jpg')
+
+# Background Sound
+mixer.music.load('./sound/Backstreet_Boys_-_I_Want_It_That_Way_Qoret.com.mp3')
+mixer.music.play(-1)  # To play the music in a loop we add -1
+mixer.music.set_volume(0.7)
+
+# Bullet Sound
+
+sound = input("Sound Effects? ")
+if sound == 'Y' or sound == "Yes":
+    sound = 'Y'
+else:
+    pass
+
 
 # Bullet
 # Ready state - You can't see the bullet on the screen
@@ -106,6 +122,8 @@ def isCollision(enemy_X, enemy_Y, bulletX, bulletY):
 running = True
 
 while running:
+
+
     screen.blit(bcImage, (0, 0))
 
     for event in pygame.event.get():
@@ -129,6 +147,10 @@ while running:
 
             if event.key == pygame.K_SPACE:
                 if bullet_state == "ready":
+                    if sound == 'Y':
+                        bullet_Sound = mixer.Sound('./sound/laser.wav')
+                        bullet_Sound.set_volume(0.4)
+                        bullet_Sound.play()
                     bulletX = playerX
                     fire_bullet(bulletX, bulletY)
 
@@ -172,6 +194,10 @@ while running:
             print(score_value)
             enemy_X[i] = random.randint(0, 736)
             enemy_Y[i] = random.randint(50, 250)
+            if sound == 'Y':
+                collision_sound = mixer.Sound('./sound/explosion.wav')
+                collision_sound.set_volume(0.3)
+                collision_sound.play()
 
         enemy(enemy_X[i], enemy_Y[i], i)
 
