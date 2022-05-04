@@ -7,6 +7,7 @@ from pygame import mixer
 # TODO : Make a single Missile to fire with Shift + Space and let it track the enemy
 
 pygame.init()
+
 # Create the Screen
 screen = pygame.display.set_mode((800, 600))
 
@@ -15,6 +16,27 @@ pygame.display.set_caption('Space Invader')
 icon = pygame.image.load('./img/ufo.png')
 
 pygame.display.set_icon(icon)
+
+
+# Background Sound
+
+def bcMusic():
+    bcMusic = mixer.Sound('./sound/Backstreet_Boys_-_I_Want_It_That_Way_Qoret.com.mp3')
+    bcMusic.set_volume(0.7)
+    bcMusic.play(-1)  # To play the music in a loop we add -1
+
+
+music = input("Background Music? ")
+if music == 'Y' or music == 'y' or music == 'yes':
+    bcMusic()
+
+# Sound Effects
+
+sound = input("Sound Effects? ")
+if sound == 'Y' or sound == "Yes":
+    sound = 'Y'
+else:
+    pass
 
 # Player
 
@@ -49,6 +71,14 @@ def showScore(x, y):
     screen.blit(score, (x, y))
 
 
+# Game Over
+
+def game_over(x, y):
+    size = pygame.font.SysFont("Algerian", 50)
+    game_over_text = size.render("GAME OVER", True, (255, 0, 0))
+    screen.blit(game_over_text, (x, y))
+
+
 # Enemy
 enemyImage = []
 enemy_X = []
@@ -72,20 +102,6 @@ def enemy(x, y, i):
 # BackGround Image
 
 bcImage = pygame.image.load('./img/space.jpg')
-
-# Background Sound
-mixer.music.load('./sound/Backstreet_Boys_-_I_Want_It_That_Way_Qoret.com.mp3')
-mixer.music.play(-1)  # To play the music in a loop we add -1
-mixer.music.set_volume(0.7)
-
-# Bullet Sound
-
-sound = input("Sound Effects? ")
-if sound == 'Y' or sound == "Yes":
-    sound = 'Y'
-else:
-    pass
-
 
 # Bullet
 # Ready state - You can't see the bullet on the screen
@@ -122,7 +138,6 @@ def isCollision(enemy_X, enemy_Y, bulletX, bulletY):
 running = True
 
 while running:
-
 
     screen.blit(bcImage, (0, 0))
 
@@ -173,6 +188,16 @@ while running:
     # Enemy
 
     for i in range(num_of_enemies):
+
+        # Game Over
+
+        if enemy_Y[i] > 440:
+            bullet_state = "fired"
+            for j in range(num_of_enemies):
+                enemy_Y[j] = 2000
+
+            game_over(250, 200)
+            break
 
         enemy_X[i] += enemyX_change[i]
 
